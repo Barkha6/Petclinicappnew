@@ -9,7 +9,7 @@ FROM tomcat:8-jre11
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 #copy build 
-COPY --from=BUILD_IMAGE Petclinicappnew/target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=BUILD_IMAGE Petclinicappnew/target/Petclinicappnew.war /usr/local/tomcat/webapps/ROOT.war
 
 
 EXPOSE 8080
