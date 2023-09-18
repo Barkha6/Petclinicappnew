@@ -1,0 +1,80 @@
+trigger:
+- main
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: ADOEngine/ADOEngine
+      endpoint: ado-engine-template
+      ref: refs/heads/master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildMavenSettingsFile: 'pom.xml'
+  runTests: 'true'
+
+stages:
+  - template: pipeline-template.yml@templates
+    parameters:
+      windowsagentpool: 'ubuntu-latest'
+      buildType: 'java'
+      deployType:  'onAzurePAAS'
+      codeRootDir: 'Java-petclinic'
+      projectName: 'Java-petclinic'
+      buildMavenSettingsFile: ''
+      runTests: 'true'
+      CI: {
+        enabled: true,
+        #isSonarqubeenabled: true,
+        isSonarCloudEnabled: true,
+        sonarbuildFor: 'java',
+        #sonarQubeSerCon: 'SonarConnect',
+        sonarCloudSerCon: 'ADO-TO-SONAR-CLOUD-VG',
+        sonarCloudOrgName: 'vgtestsonarorg',
+        sonarProjectKey: 'java-petclinic1',
+        # azureSubscription: 'Free Trial',
+        #azureContainerRegistry: 'azdoreuseacr', 
+        #azureContainerRegistryName: 'admcoeacr',
+        isSnykenabled: true,
+        serviceConnectionEndpoint: 'synkconnection',
+        severityThreshold: 'medium',
+        failOnIssues: false,
+        projectName: 'java-petclinic',
+        organization: '150524e5-a9e2-4135-9408-c7785115bd41',
+        failOnThreshold: 'critical',
+        scan: true,
+        gate: true
+      }
+      
+      CD: {
+        enabled: true,
+        azureSubscription: 'ado-engine-subs', 
+        azureAppServiceName: 'petclinicjava',
+        environmentName: 'AzureAppservice',
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.?(war|jar)'
+      }
+
+      FUNCTIONAL: {
+        enabled: false,
+        azureSubscription: 'ado-engine-subs', 
+        azureAppServiceName: 'petclinicjava',
+        environmentName: 'AzureAppservice',
+        testType: 'selenium-web',
+        gatlingScenario: '',
+        gate: false,
+        testRootDir: '/selenium/PetClinicTest.java'
+      }
+      NONFUNCTIONAL: {
+        enabled: true,
+         azureSubscription: 'ado-engine-subs', 
+        azureAppServiceName: 'partsunlimitedaspdotnet',
+        environmentName: 'AzureAppservice',
+        namespace: 'nonfunctional',
+        upgradeParameters: '--set repository=orgsharedregistry.azurecr.io/mydrive-user --set tag=$(Build.BuildId) --set name=mydrive-user',
+        gate: false,
+        testfile: 'src/test/jmeter/petclinic_test_plan.jmx'
+
+      }
