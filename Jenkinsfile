@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools{
+        maven 'mvn'
+    }
     
     environment {
         SCANNER_HOME=tool 'sonarqube-server'
