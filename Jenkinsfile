@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        SCANNER_HOME=tool 'sonarqube-server'
         registryCredential = 'awsecrdemo'
         appRegistry = '485490367164.dkr.ecr.ap-south-1.amazonaws.com/demo'
         awsRegistry = "https://485490367164.dkr.ecr.ap-south-1.amazonaws.com"
@@ -10,6 +11,33 @@ pipeline {
     }
 
     stages {
+        stage("Compile"){
+            steps{
+                sh "mvn clean compile"
+            }
+        }
+        
+         stage("Test Cases"){
+            steps{
+                sh "mvn test"
+            }
+        }
+        
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.projectKey=Petclinic '''
+    
+                }
+            }
+        }
+        stage("Build"){
+            steps{
+                sh " mvn clean install"
+            }
+        }
         stage('Build App Image') {
             steps {
                 script {
