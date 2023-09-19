@@ -5,7 +5,7 @@ pipeline {
     }
     
     environment {
-        SCANNER_HOME=tool 'sonarqube-server'
+        SCANNER_HOME=tool 'sonar-scanner'
         registryCredential = 'awsecrdemo'
         appRegistry = '485490367164.dkr.ecr.ap-south-1.amazonaws.com/demo'
         awsRegistry = "https://485490367164.dkr.ecr.ap-south-1.amazonaws.com"
@@ -29,7 +29,7 @@ pipeline {
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonarqube-server') {
-                    sh ''' $SCANNER_HOME/bin/ -Dsonar.projectName=Petclinic \
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
                     -Dsonar.java.binaries=. \
                     -Dsonar.projectKey=Petclinic '''
     
