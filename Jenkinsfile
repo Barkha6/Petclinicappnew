@@ -29,7 +29,8 @@ pipeline {
          stage("SonarQube Analysis") {
             agent any  
             steps {
-              sh 'mvn verify sonar:sonar -Dsonar.host.url=http://13.233.214.212:9000 -Dsonar.login=admin -Dsonar.password=123456'
+              sh 'mvn verify sonar:sonar -Dsonar.login=admin -Dsonar.password=123456'
+              sh 'mvn sonar:sonar'
             }
           }
         stage("Build"){
