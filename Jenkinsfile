@@ -26,16 +26,12 @@ pipeline {
             }
         }
         
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonarqube-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
-                    -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=Petclinic '''
-    
-                }
+         stage("SonarQube Analysis") {
+            agent any  
+            steps {
+              sh 'mvn sonar:sonar'
             }
-        }
+          }
         stage("Build"){
             steps{
                 sh " mvn clean install"
