@@ -26,13 +26,16 @@ pipeline {
             }
         }
         
-         stage("SonarQube Analysis") {
-            agent any  
-            steps {
-              sh 'mvn verify sonar:sonar -Dsonar.login=admin -Dsonar.password=123456'
-              sh 'mvn sonar:sonar'
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonarqube-server') {
+                    sh ''' $SCANNER_HOME/bin/sonarqube-server -Dsonar.projectName=Petclinic \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.projectKey=Petclinic '''
+    
+                }
             }
-          }
+        }
         stage("Build"){
             steps{
                 sh " mvn clean install"
