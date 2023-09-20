@@ -31,7 +31,6 @@ pipeline {
                 withSonarQubeEnv('sonarqube-server') {
                   sh  "mvn clean verify sonar:sonar \
                       -Dsonar.projectKey=petclinicapp \
-                      -Dsonar.host.url=http://13.235.16.207:9000 \
                       -Dsonar.login=sqp_d2e560f5bfe23f14ac5101b12b4defa461c31e88"
     
                 }
