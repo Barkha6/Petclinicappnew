@@ -66,7 +66,7 @@ pipeline {
           }
         stage("Deploy To Tomcat"){
             steps{
-                sh "cp  /var/lib/jenkins/workspace/petclinicapp-new/target/spring-petclinic-2.7.3.war /opt/apache-tomcat-9.0.65/webapps/ "
+                sh "cp  /var/lib/jenkins/workspace/petclinicapp-new/target/spring-petclinic-2.7.3.war /apache-tomcat-9.0.80-src/webapps/ "
             }
         }
     }
