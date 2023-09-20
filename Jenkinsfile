@@ -64,11 +64,9 @@ pipeline {
               }
             }
           }
-        stage('Deploy to ECS') {
-            steps {
-                withAWS(credentials: 'awsecrdemo', region: 'ap-south-1') {
-                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
-                }
+        stage("Deploy To Tomcat"){
+            steps{
+                sh "cp  /var/lib/jenkins/workspace/petclinicapp-new/target/petclinicapp.war /opt/apache-tomcat-9.0.65/webapps/ "
             }
         }
     }
