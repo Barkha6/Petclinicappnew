@@ -64,9 +64,11 @@ pipeline {
               }
             }
           }
-        stage("Deploy To Tomcat"){
-            steps{
-                sh "cp  /var/lib/jenkins/workspace/petclinicapp-new/target/spring-petclinic-2.7.3.war /apache-tomcat-9.0.80-src/webapps/ "
+         stage('Deploy to ECS') {
+            steps {
+                withAWS(credentials: 'awsecrdemo', region: 'ap-south-1') {
+                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
             }
         }
     }
