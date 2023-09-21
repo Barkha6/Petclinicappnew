@@ -9,7 +9,7 @@ FROM tomcat:8-jre11
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 #copy build 
-COPY /var/lib/jenkins/workspace/petclinicapp-new/target/spring-petclinic-2.7.3.jar /usr/local/tomcat/webapps/ROOT.jar
+COPY /var/lib/jenkins/workspace/petclinicapp-new/target/ /usr/local/tomcat/webapps/ROOT.jar
 
 
 EXPOSE 8080
