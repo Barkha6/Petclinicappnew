@@ -12,5 +12,5 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 COPY --from=BUILD_IMAGE Petclinicappnew/target/ /usr/local/tomcat/webapps/ROOT.jar
 
 
-EXPOSE 9090
+EXPOSE 8090
 CMD ["catalina.sh", "run"]
